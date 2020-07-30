@@ -18,9 +18,8 @@ function Get-Win10ISOLink {
         [Parameter(Mandatory=$false)]
         [ValidateSet("Arabic", "Brazilian Portuguese", "Bulgarian", "Chinese (Simplified)", "Chinese (Traditional)", "Croatian", "Czech", "Danish", "Dutch", "English", "English International", "Estonian", "Finnish", "French", "French Canadian", "German", "Greek", "Hebrew", "Hungarian", "Italian", "Japanese", "Korean", "Latvian", "Lithuanian", "Norwegian", "Polish", "Portuguese", "Romanian", "Russian", "Serbian Latin", "Slovak", "Slovenian", "Spanish", "Spanish (Mexico)", "Swedish", "Thai", "Turkish", "Ukrainian")]
         [String] $Language = "English",
-        [Parameter(Mandatory=$false)] 
-        [ValidateSet("1909", "Latest")]
-        [String] $Version = "Latest"
+        [Parameter(Mandatory=$false)]
+        [String] $Version = "1909"
     )
     
     # prefered architecture
@@ -33,7 +32,12 @@ function Get-Win10ISOLink {
         $prodID = ([regex]::Match((($response).RawContent), 'product-info-content.*option value="(.*)">Windows 10')).captures.groups[1].value
     } else{
         # uses hard-coded id
-        $prodID = "1429"
+        $WindowsVersions = @{
+            "2004"  = 1626
+            "1909"  = 1429
+            "1903"  = 1384
+        }
+        $prodID = $WindowsVersions[$Version]
     } 
 
     # variables you might not want to change (unless msft changes their schema)

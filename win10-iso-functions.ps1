@@ -142,7 +142,18 @@ function Start-Win10UpgradeISO {
     
     Write-Verbose "Attempting to download windows 10 iso to '$DLPath'" -Verbose
     try {
-        (New-Object System.Net.WebClient).DownloadFile($DLLink, "$DLPath")
+        $Split = $DLPath.Split("\\")
+        New-Item -Path $(([string]$split[0..($Split.count-2)]) -replace(" ","\")) -ItemType Directory -Force | Out-Null
+        
+        if (Test-Path -Path $DLPath) {
+            $ISO = Get-Item $DLPath
+            If ($ISO.Length -ne $((Invoke-WebRequest $DLLink -Method Head).Headers.'Content-Length')) {
+                Remove-Item $DLPath -Force
+                (New-Object System.Net.WebClient).DownloadFile($DLLink, "$DLPath")
+            }
+        } else {
+            (New-Object System.Net.WebClient).DownloadFile($DLLink, "$DLPath")
+        }
     }
     catch {
         throw "Failed to download ISO at path specified."

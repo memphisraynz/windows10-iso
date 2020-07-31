@@ -147,7 +147,7 @@ function Start-Win10UpgradeISO {
         
         if (Test-Path -Path $DLPath) {
             $ISO = Get-Item $DLPath
-            If ($ISO.Length -ne $((Invoke-WebRequest $DLLink -Method Head).Headers.'Content-Length')) {
+            If ($ISO.Length -ne $((Invoke-WebRequest $DLLink -Method Head -UseBasicParsing).Headers.'Content-Length')) {
                 Remove-Item $DLPath -Force
                 (New-Object System.Net.WebClient).DownloadFile($DLLink, "$DLPath")
             }

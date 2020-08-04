@@ -129,7 +129,7 @@ function Start-Win10UpgradeISO {
         [Parameter(Mandatory=$false)] 
         [String] [String] $DLPath = (Get-Location).Path + "\" +"Win10_" + $Architecture + ".iso",
         [Parameter(Mandatory=$false)] 
-        [String] $LogPath = (Get-Location).Path 
+        [String] $LogPath = $((Split-Path $DLPath) + "\Win10_Upgrade.log")
     )
 
     Write-Verbose "Attempting to generate a $Architecture windows 10 iso download link" -Verbose

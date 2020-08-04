@@ -171,7 +171,7 @@ function Start-Win10UpgradeISO {
     
     if ($DriveLetter) {
         if ($Reboot -eq $true){
-            Invoke-Expression "$($DriveLetter):\setup.exe /auto Upgrade /Compat IgnoreWarning /DynamicUpdate disable /copylogs $LogPath"
+            Invoke-Expression "$($DriveLetter):\setup.exe /auto Upgrade /quiet /Compat IgnoreWarning /DynamicUpdate disable /copylogs $LogPath"
         } else{
             Invoke-Expression "$($DriveLetter):\setup.exe /auto Upgrade /quiet /NoReboot /NoRestartUI /NoRestart /Compat IgnoreWarning /DynamicUpdate disable /copylogs $LogPath"
         }    

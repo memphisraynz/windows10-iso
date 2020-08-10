@@ -177,7 +177,7 @@ function Start-Win10UpgradeISO {
     
     if ($DriveLetter) {
         if ($Reboot -eq $true){
-            Write-Verbose "$($DriveLetter):\setup.exe /auto Upgrade /migratedrivers all /ShowOOBE none /Compat IgnoreWarning /DynamicUpdate disable /copylogs $LogPath" -Verbose
+            Write-Output "$($DriveLetter):\setup.exe /auto Upgrade /migratedrivers all /ShowOOBE none /Compat IgnoreWarning /DynamicUpdate disable /copylogs $LogPath"
             Invoke-Expression "$($DriveLetter):\setup.exe /auto Upgrade /migratedrivers all /ShowOOBE none /Compat IgnoreWarning /DynamicUpdate disable /copylogs $LogPath"
         } else{
             Invoke-Expression "$($DriveLetter):\setup.exe /auto Upgrade /migratedrivers all /ShowOOBE none /NoReboot /NoRestartUI /NoRestart /Compat IgnoreWarning /DynamicUpdate disable /copylogs $LogPath"

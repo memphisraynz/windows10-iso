@@ -168,6 +168,7 @@ function Start-Win10UpgradeISO {
             $DriveLetter = (Get-DiskImage -ImagePath $ISOPath | Get-Volume).DriveLetter
         } else {
             Mount-DiskImage -ImagePath $ISOPath
+            Start-Sleep -Seconds 5
             $DriveLetter = (Get-DiskImage -ImagePath $ISOPath | Get-Volume).DriveLetter
         }
     } else {

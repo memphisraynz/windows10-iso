@@ -167,6 +167,9 @@ function Start-Win10UpgradeISO {
         if ($(Get-DiskImage -ImagePath $ISOPath).Attached -eq $true ) {
             $DriveLetter = (Get-DiskImage -ImagePath $ISOPath | Get-Volume).DriveLetter
         } else {
+            Mount-DiskImage -ImagePath $ISOPath
+            Start-Sleep -Seconds 5
+            
             $timeout = New-TimeSpan -Minutes 1
             $stopwatch = [diagnostics.stopwatch]::StartNew()
             do {

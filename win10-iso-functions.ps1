@@ -167,10 +167,13 @@ function Start-Win10UpgradeISO {
         if ($(Get-DiskImage -ImagePath $ISOPath).Attached -eq $true ) {
             $DriveLetter = (Get-DiskImage -ImagePath $ISOPath | Get-Volume).DriveLetter
         } else {
-            #Mount-DiskImage -ImagePath $ISOPath
-            #Start-Sleep -Seconds 5
-            #$DriveLetter = (Get-DiskImage -ImagePath $ISOPath | Get-Volume).DriveLetter
-            $DriveLetter = (Mount-DiskImage -ImagePath $ISOPath -PassThru | Get-DiskImage | Get-Volume).DriveLetter
+            $timeout = New-TimeSpan -Minutes 1
+            $stopwatch = [diagnostics.stopwatch]::StartNew()
+
+            While ($DriveLetter -or $stopwatch.elapsed -lt $timeout) {
+                $DriveLetter = (Get-DiskImage -ImagePath $ISOPath -ErrorAction SilentlyContinue | Get-Volume).DriveLetter
+                Start-Sleep -Seconds 1
+            }
         }
     } else {
         throw "ISO could not be found under $($ISOPath)."

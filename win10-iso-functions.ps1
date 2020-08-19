@@ -107,10 +107,19 @@ function Get-Win10ISOLink {
 
 function Start-Win10ISODownload {
     param (
-        $DownloadLink,
+        [String] $Architecture = (Get-WmiObject Win32_OperatingSystem).OSArchitecture,
+        [String] $Version = "1909",
         $DownloadPath
     )
 
+    Write-Verbose "Attempting to generate a $Architecture windows 10 iso download link" -Verbose
+    try {
+        $DownloadLink = Get-Win10ISOLink -Architecture $Architecture -Version $Version
+    }
+    catch {
+        throw "Failed to generate windows 10 iso download link."
+    }
+    
     Write-Verbose "Attempting to download windows 10 iso to '$DownloadPath'" -Verbose
     try {
         $Split = $DownloadPath.Split("\\")
@@ -160,17 +169,9 @@ function Start-Win10UpgradeISO {
         [String] $Version = "1909"
     )
 
-    Write-Verbose "Attempting to generate a $Architecture windows 10 iso download link" -Verbose
-    try {
-        $DLLink = Get-Win10ISOLink -Architecture $Architecture -Version $Version
-    }
-    catch {
-        throw "Failed to generate windows 10 iso download link."
-    }
-    
     Write-Verbose "Attempting to download windows 10 iso to '$DLPath'" -Verbose
     try {
-        Start-Win10ISODownload -DownloadLink $DLLink -DownloadPath $DLPath
+        Start-Win10ISODownload -Version "1909" -DownloadPath $DLPath
     }
     catch {
         throw "Failed to Download Windows 10 iso."

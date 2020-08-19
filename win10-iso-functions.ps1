@@ -189,7 +189,7 @@ function Start-Win10UpgradeISO {
             Write-Output "$($DriveLetter):\setup.exe /auto Upgrade /migratedrivers all /ShowOOBE none /Compat IgnoreWarning /DynamicUpdate disable /copylogs $LogPath"
             Invoke-Expression "$($DriveLetter):\setup.exe /auto Upgrade /migratedrivers all /ShowOOBE none /Compat IgnoreWarning /DynamicUpdate disable /copylogs $LogPath"
         } else{
-            Invoke-Expression "$($DriveLetter):\setup.exe /auto Upgrade /migratedrivers all /ShowOOBE none /NoReboot /NoRestartUI /NoRestart /Compat IgnoreWarning /DynamicUpdate disable /copylogs $LogPath"
+            Invoke-Expression "$($DriveLetter):\setup.exe /auto Upgrade /migratedrivers all /ShowOOBE none /NoReboot /Compat IgnoreWarning /DynamicUpdate disable /copylogs $LogPath"
         }    
     } else {
         throw "ISO could not be mounted on this system."

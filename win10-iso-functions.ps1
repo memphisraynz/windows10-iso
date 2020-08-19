@@ -105,6 +105,32 @@ function Get-Win10ISOLink {
     Write-Output $dlLink
 }
 
+function Start-Win10ISODownload {
+    param (
+        $DownloadLink,
+        $DownloadPath
+    )
+
+    Write-Verbose "Attempting to download windows 10 iso to '$DownloadPath'" -Verbose
+    try {
+        $Split = $DownloadPath.Split("\\")
+        New-Item -Path $(([string]$split[0..($Split.count-2)]) -replace(" ","\")) -ItemType Directory -Force | Out-Null
+        
+        if (Test-Path -Path $DownloadPath) {
+            $ISO = Get-Item $DownloadPath
+            If ($ISO.Length -ne $((Invoke-WebRequest $DownloadLink -Method Head -UseBasicParsing).Headers.'Content-Length')) {
+                Remove-Item $DownloadPath -Force
+                (New-Object System.Net.WebClient).DownloadFile($DownloadLink, "$DownloadPath")
+            }
+        } else {
+            (New-Object System.Net.WebClient).DownloadFile($DownloadLink, "$DownloadPath")
+        }
+    }
+    catch {
+        throw "Failed to download ISO at path specified."
+    }
+}
+
 function Start-Win10UpgradeISO {
     <#
     .SYNOPSIS
@@ -144,21 +170,10 @@ function Start-Win10UpgradeISO {
     
     Write-Verbose "Attempting to download windows 10 iso to '$DLPath'" -Verbose
     try {
-        $Split = $DLPath.Split("\\")
-        New-Item -Path $(([string]$split[0..($Split.count-2)]) -replace(" ","\")) -ItemType Directory -Force | Out-Null
-        
-        if (Test-Path -Path $DLPath) {
-            $ISO = Get-Item $DLPath
-            If ($ISO.Length -ne $((Invoke-WebRequest $DLLink -Method Head -UseBasicParsing).Headers.'Content-Length')) {
-                Remove-Item $DLPath -Force
-                (New-Object System.Net.WebClient).DownloadFile($DLLink, "$DLPath")
-            }
-        } else {
-            (New-Object System.Net.WebClient).DownloadFile($DLLink, "$DLPath")
-        }
+        Start-Win10ISODownload -DownloadLink $DLLink -DownloadPath $DLPath
     }
     catch {
-        throw "Failed to download ISO at path specified."
+        throw "Failed to Download Windows 10 iso."
     }
     
     $ISOPath = $DLPath

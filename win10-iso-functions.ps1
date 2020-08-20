@@ -1,3 +1,32 @@
+function Remove-FileLock {
+    param (
+        [Parameter(Mandatory=$true)]
+        [string]$LockFile
+    )
+    
+    $HandleEXE = "C:\ProgramData\TrimbleNetworks\SysInternals\handle64.exe"
+    $DownloadLink = "https://live.sysinternals.com/handle64.exe"
+
+    #Create Directory
+    $Split = $HandleEXE.Split("\\")
+    New-Item -Path $(([string]$split[0..($Split.count-2)]) -replace(" ","\")) -ItemType Directory -Force | Out-Null
+
+    #Download File
+    (New-Object System.Net.WebClient).DownloadFile($DownloadLink, $HandleEXE)
+
+    & $HandleEXE -NoBanner $LockFile | Where-Object { $_ -match 'pid' } | ForEach-Object {
+        $ProcessID = ($_ -split '\s+')[2]
+        $LockID = $(($_ -split '\s+')[5]) -replace ':', ''
+    }
+
+    if (-not $ProcessID -and -not $LockID) {
+        "No lock"
+    } else {
+        "Removing lock"
+        & $HandleEXE -c $LockID -p $ProcessID -y
+    }
+}
+
 function Get-Win10ISOLink {
     <#
     .SYNOPSIS
@@ -184,6 +213,7 @@ function Start-Win10UpgradeISO {
         if ($ISOMounted.Attached -eq $true) {
             $DriveLetter = (Get-DiskImage -ImagePath $ISOPath | Get-Volume).DriveLetter
         } else {
+            Remove-FileLock -LockFile $ISOPath
             Mount-DiskImage -ImagePath $ISOPath
             Start-Sleep -Seconds 5
             

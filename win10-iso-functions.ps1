@@ -4,7 +4,7 @@ function Remove-FileLock {
         [string]$LockFile
     )
     
-    $HandleEXE = "C:\ProgramData\TrimbleNetworks\SysInternals\handle64.exe"
+    $HandleEXE = "C:\ProgramData\SysInternals\handle64.exe"
     $DownloadLink = "https://live.sysinternals.com/handle64.exe"
 
     #Create Directory

@@ -20,9 +20,9 @@ function Remove-FileLock {
     }
 
     if (-not $ProcessID -and -not $LockID) {
-        "No lock"
+        Write-Verbose "No lock on file $LockFile" -Verbose
     } else {
-        "Removing lock"
+        Write-Verbose "Attempting to remove lock on file $LockFile" -Verbose
         & $HandleEXE -c $LockID -p $ProcessID -y
     }
 }
@@ -214,7 +214,7 @@ function Start-Win10UpgradeISO {
             $DriveLetter = (Get-DiskImage -ImagePath $ISOPath | Get-Volume).DriveLetter
         } else {
             Remove-FileLock -LockFile $ISOPath
-            Mount-DiskImage -ImagePath $ISOPath
+            Mount-DiskImage -ImagePath $ISOPath | Out-Null
             Start-Sleep -Seconds 5
             
             $timeout = New-TimeSpan -Minutes 1

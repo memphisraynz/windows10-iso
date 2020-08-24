@@ -214,6 +214,7 @@ function Start-Win10UpgradeISO {
             $DriveLetter = (Get-DiskImage -ImagePath $ISOPath | Get-Volume).DriveLetter
         } else {
             Remove-FileLock -LockFile $ISOPath
+            Start-Sleep -Seconds 10
             Mount-DiskImage -ImagePath $ISOPath | Out-Null
             Start-Sleep -Seconds 5
             

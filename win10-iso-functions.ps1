@@ -27,6 +27,27 @@ function Remove-FileLock {
     }
 }
 
+function CleanPreviousUpdate {
+    $ErrorActionPreference = 'SilentlyContinue'
+
+    stop-service wuauserv
+    Remove-Item -Path "C:\Windows\SoftwareDistribution" -Recurse -Force
+    start-service wuauserv
+
+    if (Test-Path "HKLM:\SOFTWARE\Microsoft\Provisioning.old") {
+        Remove-Item -Path "HKLM:\SOFTWARE\Microsoft\Provisioning.old" -Recurse -Force
+    }
+    Rename-Item -Path "HKLM:\SOFTWARE\Microsoft\Provisioning" -NewName "Provisioning.old" | Out-Null
+    if (Test-Path "C:\Windows\Provisioning.old") {
+        takeown /F "C:\Windows\Provisioning.old\*" /R /A
+        icacls "C:\Windows\Provisioning.old\*.*" /T /grant administrators:F
+        Remove-Item -Path "C:\Windows\Provisioning.old" -Recurse -Force
+    }
+    Rename-Item -Path "C:\Windows\Provisioning" -NewName "Provisioning.old" | Out-Null
+
+    Dism /cleanup-Wim
+}
+
 function Get-Win10ISOLink {
     <#
     .SYNOPSIS
@@ -197,7 +218,10 @@ function Start-Win10UpgradeISO {
         [Parameter(Mandatory=$false)]
         [String] $Version = "1909"
     )
-
+    
+    Write-Verbose "Cleaning up any previous Windows 10 updates" -Verbose
+    CleanPreviousUpdate
+    
     Write-Verbose "Attempting to download windows 10 iso to '$DLPath'" -Verbose
     try {
         Start-Win10ISODownload -Version "1909" -DownloadPath $DLPath

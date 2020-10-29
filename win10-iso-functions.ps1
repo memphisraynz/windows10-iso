@@ -286,7 +286,7 @@ function Start-Win10UpgradeWUA {
         [Parameter(Mandatory=$false)] 
         [String] $DLPath = (Get-Location).Path,
         [Parameter(Mandatory=$false)] 
-        [String] $LogPath = (Get-Location).Path
+        [String] $LogPath = "$DLPath\Log"
     )
     if(!(Test-Path -Path $DLPath)){$null = New-Item -ItemType directory -Path $DLPath -Force}   
     if(!(Test-Path -Path $LogPath)){$null = New-Item -ItemType directory -Path $LogPath -Force}      

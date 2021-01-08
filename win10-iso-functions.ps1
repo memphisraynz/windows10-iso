@@ -69,7 +69,7 @@ function Get-Win10ISOLink {
         [ValidateSet("Arabic", "Brazilian Portuguese", "Bulgarian", "Chinese (Simplified)", "Chinese (Traditional)", "Croatian", "Czech", "Danish", "Dutch", "English", "English International", "Estonian", "Finnish", "French", "French Canadian", "German", "Greek", "Hebrew", "Hungarian", "Italian", "Japanese", "Korean", "Latvian", "Lithuanian", "Norwegian", "Polish", "Portuguese", "Romanian", "Russian", "Serbian Latin", "Slovak", "Slovenian", "Spanish", "Spanish (Mexico)", "Swedish", "Thai", "Turkish", "Ukrainian")]
         [String] $Language = "English",
         [Parameter(Mandatory=$false)]
-        [String] $Version = "1909"
+        [String] $Version = "20H2"
     )
     
     # prefered architecture
@@ -83,6 +83,7 @@ function Get-Win10ISOLink {
     } else{
         # uses hard-coded id
         $WindowsVersions = @{
+            "20H2"  = 1882
             "2004"  = 1626
             "1909"  = 1429
             "1903"  = 1384

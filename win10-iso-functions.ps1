@@ -220,8 +220,8 @@ function Start-Win10UpgradeISO {
         [String] $Version = "1909"
     )
     
-    Write-Verbose "Cleaning up any previous Windows 10 updates" -Verbose
-    CleanPreviousUpdate
+    #Write-Verbose "Cleaning up any previous Windows 10 updates" -Verbose
+    #CleanPreviousUpdate
     
     Write-Verbose "Attempting to download windows 10 iso to '$DLPath'" -Verbose
     try {
@@ -258,10 +258,10 @@ function Start-Win10UpgradeISO {
     
     if ($DriveLetter) {
         if ($Reboot -eq $true){
-            Write-Output "$($DriveLetter):\setup.exe /auto Upgrade /migratedrivers all /ShowOOBE none /Compat IgnoreWarning /DynamicUpdate disable /copylogs $LogPath"
-            Invoke-Expression "$($DriveLetter):\setup.exe /auto Upgrade /migratedrivers all /ShowOOBE none /Compat IgnoreWarning /DynamicUpdate disable /copylogs $LogPath"
+            Write-Output "$($DriveLetter):\setup.exe /auto upgrade /migratedrivers all /showoobe none /compat ignorewarning /dynamicupdate disable /copylogs $LogPath"
+            Invoke-Expression "$($DriveLetter):\setup.exe /auto upgrade /migratedrivers all /showoobe none /compat ignorewarning /dynamicupdate disable /copylogs $LogPath"
         } else{
-            Invoke-Expression "$($DriveLetter):\setup.exe /auto Upgrade /migratedrivers all /ShowOOBE none /NoReboot /Compat IgnoreWarning /DynamicUpdate disable /copylogs $LogPath"
+            Invoke-Expression "$($DriveLetter):\setup.exe /auto upgrade /migratedrivers all /showoobe none /noreboot /compat ignorewarning /dynamicupdate disable /copylogs $LogPath"
         }    
     } else {
         throw "ISO could not be mounted on this system."

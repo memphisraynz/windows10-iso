@@ -159,7 +159,7 @@ function Get-Win10ISOLink {
 function Start-Win10ISODownload {
     param (
         [String] $Architecture = (Get-WmiObject Win32_OperatingSystem).OSArchitecture,
-        [String] $Version = "1909",
+        [String] $Version = "20H2",
         $DownloadPath
     )
 
@@ -217,7 +217,7 @@ function Start-Win10UpgradeISO {
         [Parameter(Mandatory=$false)] 
         [String] $LogPath = $((Split-Path $DLPath) + "\Win10_Upgrade.log"),
         [Parameter(Mandatory=$false)]
-        [String] $Version = "1909"
+        [String] $Version = "20H2"
     )
     
     #Write-Verbose "Cleaning up any previous Windows 10 updates" -Verbose
@@ -225,7 +225,7 @@ function Start-Win10UpgradeISO {
     
     Write-Verbose "Attempting to download windows 10 iso to '$DLPath'" -Verbose
     try {
-        Start-Win10ISODownload -Version "1909" -DownloadPath $DLPath
+        Start-Win10ISODownload -Version $Version -DownloadPath $DLPath
     }
     catch {
         throw "Failed to Download Windows 10 iso."

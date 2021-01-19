@@ -69,7 +69,7 @@ function Get-Win10ISOLink {
         [ValidateSet("Arabic", "Brazilian Portuguese", "Bulgarian", "Chinese (Simplified)", "Chinese (Traditional)", "Croatian", "Czech", "Danish", "Dutch", "English", "English International", "Estonian", "Finnish", "French", "French Canadian", "German", "Greek", "Hebrew", "Hungarian", "Italian", "Japanese", "Korean", "Latvian", "Lithuanian", "Norwegian", "Polish", "Portuguese", "Romanian", "Russian", "Serbian Latin", "Slovak", "Slovenian", "Spanish", "Spanish (Mexico)", "Swedish", "Thai", "Turkish", "Ukrainian")]
         [String] $Language = "English",
         [Parameter(Mandatory=$false)]
-        [String] $Version = "20H2"
+        [String] $Version = "2009"
     )
     
     # prefered architecture
@@ -83,7 +83,7 @@ function Get-Win10ISOLink {
     } else{
         # uses hard-coded id
         $WindowsVersions = @{
-            "20H2"  = 1882
+            "2009"  = 1882
             "2004"  = 1626
             "1909"  = 1429
             "1903"  = 1384
@@ -159,7 +159,7 @@ function Get-Win10ISOLink {
 function Start-Win10ISODownload {
     param (
         [String] $Architecture = (Get-WmiObject Win32_OperatingSystem).OSArchitecture,
-        [String] $Version = "20H2",
+        [String] $Version = "2009",
         $DownloadPath
     )
 
@@ -217,11 +217,11 @@ function Start-Win10UpgradeISO {
         [Parameter(Mandatory=$false)] 
         [String] $LogPath = $((Split-Path $DLPath) + "\Win10_Upgrade.log"),
         [Parameter(Mandatory=$false)]
-        [String] $Version = "20H2"
+        [String] $Version = "2009"
     )
     
-    #Write-Verbose "Cleaning up any previous Windows 10 updates" -Verbose
-    #CleanPreviousUpdate
+    Write-Verbose "Cleaning up any previous Windows 10 updates" -Verbose
+    CleanPreviousUpdate
     
     Write-Verbose "Attempting to download windows 10 iso to '$DLPath'" -Verbose
     try {

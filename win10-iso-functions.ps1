@@ -241,13 +241,19 @@ function Start-Win10UpgradeISO {
             Remove-FileLock -LockFile $ISOPath
             Start-Sleep -Seconds 10
             Mount-DiskImage -ImagePath $ISOPath | Out-Null
-            Start-Sleep -Seconds 5
+            #Start-Sleep -Seconds 5
             
             $timeout = New-TimeSpan -Minutes 1
             $stopwatch = [diagnostics.stopwatch]::StartNew()
             do {
-                Start-Sleep -Seconds 1
                 $DriveLetter = (Get-DiskImage -ImagePath $ISOPath -ErrorAction SilentlyContinue | Get-Volume).DriveLetter
+                #Close explorer popup
+                $locationurl = 'file:///' + $driveletter + ':/'
+                $shell = New-Object -ComObject Shell.Application
+                $window = $shell.Windows() | Where-Object {$_.LocationURL -eq $locationurl}
+                $window.Quit()
+                #Sleep and try again
+                Start-Sleep -Seconds 1
             } until ($DriveLetter -or $stopwatch.elapsed -gt $timeout)
         }
     } else {

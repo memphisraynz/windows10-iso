@@ -251,7 +251,9 @@ function Start-Win10UpgradeISO {
                 $locationurl = 'file:///' + $driveletter + ':/'
                 $shell = New-Object -ComObject Shell.Application
                 $window = $shell.Windows() | Where-Object {$_.LocationURL -eq $locationurl}
-                $window.Quit()
+                if ($window) {
+                    $window.Quit()
+                }
                 #Sleep and try again
                 Start-Sleep -Seconds 1
             } until ($DriveLetter -or $stopwatch.elapsed -gt $timeout)

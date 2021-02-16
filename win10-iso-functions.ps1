@@ -218,7 +218,8 @@ function Start-Win10UpgradeISO {
         [Parameter(Mandatory=$false)] 
         [String] $LogPath = $((Split-Path $DLPath) + "\Win10_Upgrade.log"),
         [Parameter(Mandatory=$false)]
-        [String] $Version = "2009"
+        [String] $Version = "2009",
+        [switch] $DynamicUpdates
     )
     
     Write-Verbose "Cleaning up any previous Windows 10 updates" -Verbose
@@ -265,12 +266,18 @@ function Start-Win10UpgradeISO {
     
     Write-Warning "The Upgrade will commence shortly. Your PC will be rebooted soon. Please save any work you do not want to lose."
     
+    if ($DynamicUpdates -eq $true) {
+        $DynamicUpdate = "enable"
+    } else {
+        $DynamicUpdate = "disable"
+    }
+
     if ($DriveLetter) {
         if ($Reboot -eq $true){
-            Write-Output "$($DriveLetter):\setup.exe /auto upgrade /migratedrivers all /showoobe none /compat ignorewarning /dynamicupdate enable /copylogs $LogPath"
-            Invoke-Expression "$($DriveLetter):\setup.exe /auto upgrade /migratedrivers all /showoobe none /compat ignorewarning /dynamicupdate enable /copylogs $LogPath"
+            Write-Output "$($DriveLetter):\setup.exe /auto upgrade /migratedrivers all /showoobe none /compat ignorewarning /dynamicupdate $DynamicUpdate /copylogs $LogPath"
+            Invoke-Expression "$($DriveLetter):\setup.exe /auto upgrade /migratedrivers all /showoobe none /compat ignorewarning /dynamicupdate $DynamicUpdate /copylogs $LogPath"
         } else{
-            Invoke-Expression "$($DriveLetter):\setup.exe /auto upgrade /migratedrivers all /showoobe none /noreboot /compat ignorewarning /dynamicupdate enable /copylogs $LogPath"
+            Invoke-Expression "$($DriveLetter):\setup.exe /auto upgrade /migratedrivers all /showoobe none /noreboot /compat ignorewarning /dynamicupdate $DynamicUpdate /copylogs $LogPath"
         }    
     } else {
         throw "ISO could not be mounted on this system."

@@ -37,14 +37,15 @@ function CleanPreviousUpdate {
     if (Test-Path "HKLM:\SOFTWARE\Microsoft\Provisioning.old") {
         Remove-Item -Path "HKLM:\SOFTWARE\Microsoft\Provisioning.old" -Recurse -Force
     }
-    Rename-Item -Path "HKLM:\SOFTWARE\Microsoft\Provisioning" -NewName "Provisioning.old" | Out-Null
+    Rename-Item -Path "HKLM:\SOFTWARE\Microsoft\Provisioning" -NewName "Provisioning.old" -Force -ErrorAction SilentlyContinue
+
     if (Test-Path "C:\Windows\Provisioning.old") {
         takeown /F "C:\Windows\Provisioning.old\*" /R /A
         icacls "C:\Windows\Provisioning.old\*.*" /T /grant administrators:F
         Remove-Item -Path "C:\Windows\Provisioning.old" -Recurse -Force
     }
-    Rename-Item -Path "C:\Windows\Provisioning" -NewName "Provisioning.old" | Out-Null
-    Rename-Item -Path 'C:\$WINDOWS.~BT' -NewName '$WINDOWS.~BT.old' | Out-Null
+    Rename-Item -Path "C:\Windows\Provisioning" -NewName "Provisioning.old" -Force -ErrorAction SilentlyContinue
+    Rename-Item -Path 'C:\$WINDOWS.~BT' -NewName '$WINDOWS.~BT.old' -Force -ErrorAction SilentlyContinue
 
     Dism /cleanup-Wim
 }

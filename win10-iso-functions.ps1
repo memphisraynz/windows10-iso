@@ -44,6 +44,7 @@ function CleanPreviousUpdate {
         Remove-Item -Path "C:\Windows\Provisioning.old" -Recurse -Force
     }
     Rename-Item -Path "C:\Windows\Provisioning" -NewName "Provisioning.old" | Out-Null
+    Rename-Item -Path 'C:\$WINDOWS.~BT' -NewName '$WINDOWS.~BT.old' | Out-Null
 
     Dism /cleanup-Wim
 }

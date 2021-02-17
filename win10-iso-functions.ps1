@@ -34,10 +34,10 @@ function CleanPreviousUpdate {
     Remove-Item -Path "C:\Windows\SoftwareDistribution" -Recurse -Force
     start-service wuauserv
 
-    if (Test-Path "HKLM:\SOFTWARE\Microsoft\Provisioning.old") {
-        Remove-Item -Path "HKLM:\SOFTWARE\Microsoft\Provisioning.old" -Recurse -Force
-    }
-    Rename-Item -Path "HKLM:\SOFTWARE\Microsoft\Provisioning" -NewName "Provisioning.old" -Force -ErrorAction SilentlyContinue
+    #if (Test-Path "HKLM:\SOFTWARE\Microsoft\Provisioning.old") {
+    #    Remove-Item -Path "HKLM:\SOFTWARE\Microsoft\Provisioning.old" -Recurse -Force
+    #}
+    #Rename-Item -Path "HKLM:\SOFTWARE\Microsoft\Provisioning" -NewName "Provisioning.old" -Force -ErrorAction SilentlyContinue
 
     if (Test-Path "C:\Windows\Provisioning.old") {
         takeown /F "C:\Windows\Provisioning.old\*" /R /A

@@ -225,18 +225,21 @@ function Start-Win10UpgradeISO {
         [String] $LogPath = $((Split-Path $DLPath) + "\Win10_Upgrade.log"),
         [Parameter(Mandatory=$false)]
         [String] $Version = "2009",
-        [switch] $DynamicUpdates
+        [switch] $DynamicUpdates,
+        [switch] $LocalOnly
     )
     
     Write-Verbose "Cleaning up any previous Windows 10 updates" -Verbose
     CleanPreviousUpdate
     
-    Write-Verbose "Attempting to download windows 10 iso to '$DLPath'" -Verbose
-    try {
-        Start-Win10ISODownload -Version $Version -DownloadPath $DLPath
-    }
-    catch {
-        throw "Failed to Download Windows 10 iso."
+    if (-not $LocalOnly) {
+        Write-Verbose "Attempting to download windows 10 iso to '$DLPath'" -Verbose
+        try {
+            Start-Win10ISODownload -Version $Version -DownloadPath $DLPath
+        }
+        catch {
+            throw "Failed to Download Windows 10 iso."
+        }
     }
     
     $ISOPath = $DLPath

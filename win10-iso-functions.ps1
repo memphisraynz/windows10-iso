@@ -282,6 +282,7 @@ function Start-Win10UpgradeISO {
     }
 
     if ($DriveLetter) {
+        Write-Output "ISO mounted to volume $DriveLetter"
         if ($Reboot -eq $true){
             Write-Output "$($DriveLetter):\setup.exe /auto upgrade /migratedrivers all /showoobe none /compat ignorewarning /dynamicupdate $DynamicUpdate /copylogs $LogPath"
             Invoke-Expression "$($DriveLetter):\setup.exe /auto upgrade /migratedrivers all /showoobe none /compat ignorewarning /dynamicupdate $DynamicUpdate /copylogs $LogPath"
